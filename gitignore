@@ -1,0 +1,29 @@
+# General
+log/
+*.log
+NOTES.md
+
+# Ansible
+ansible_shared_secret*
+
+# Mac
+**/.DS_Store
+
+# Node
+npm-debug.log
+
+# Python
+**/.python-version
+
+# vi
+*~
+
+# WebStorm
+.idea/
+
+# Windows
+**/.Thumbs.db
+
+
+# VSCode
+**/.vscode/
