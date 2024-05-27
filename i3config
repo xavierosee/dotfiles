@@ -6,10 +6,6 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-# font pango:monospace 8
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:JuliaMono SemiBold 8
 
 # Start XDG autostart .desktop files using dex. See also
@@ -43,7 +39,7 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 exec --no-startup-id blueman-applet &
 
 # Display Setup
-exec --no-startup-id xrandr --output DisplayPort-0 --right-of eDP
+exec --no-startup-id xrandr --output nonprimary --right-of eDP
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -103,15 +99,6 @@ bindsym $mod+e layout toggle split
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
-# change focus between tiling / floating windows
-# bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-bindsym $mod+a focus parent
-
-# focus the child container
-#bindsym $mod+d focus child
-
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1:web"
@@ -119,8 +106,8 @@ set $ws2 "2:term"
 set $ws3 "3:slack"
 set $ws4 "4:music"
 set $ws5 "5:vscode"
-set $ws6 "6:random"
-set $ws7 "7:temp"
+set $ws6 "6:misc-wide"
+set $ws7 "7:misc-small"
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -141,13 +128,14 @@ bindsym $mod+Shift+6 move container to workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7
 
 # Assign workspaces to Displays
-workspace $ws1 output DisplayPort-0
-workspace $ws2 output eDP
-workspace $ws3 output eDP
-workspace $ws4 output eDP
-workspace $ws5 output DisplayPort-0
-workspace $ws6 output DisplayPort-0
-workspace $ws7 output eDP
+# If multiples Displays are listed, the first available will be used
+workspace $ws1 output nonprimary
+workspace $ws2 output primary
+workspace $ws3 output primary
+workspace $ws4 output primary
+workspace $ws5 output nonprimary
+workspace $ws6 output nonprimary
+workspace $ws7 output primary
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -204,7 +192,7 @@ bindsym Ctrl+$mod+l exec "i3lock -t -i ~/Pictures/wallpapers/mercury.png"
 exec --no-startup-id 'xautolock -detectsleep -time 3 -locker "i3lock -t -i ~/Pictures/wallpapers/mercury.png"'
 
 # Assign specific Apps to Workspaces
-assign [class="(?i)firefox"] $ws1
+assign [class="(?i)google-chrome"] $ws1
 assign [class="(?i)alacritty"] $ws2
 assign [class="(?i)slack"] $ws3
 assign [class="(?i)google-chrome" instance="crx_cinhimbnkkaeohfgghhklpknlkffjgod"] $ws4 # YT music
@@ -213,7 +201,7 @@ assign [class="(?i)code"] $ws5
 # Always-floating windows
 for_window [class="(?i)blueman-manager"] floating enable
 
-# remap CAPS_LOCK to CTRL
+# remap CAPS_LOCK to CTRL (doesn't consistently work)
 exec --no-startup-id /usr/bin/setxkbmap -option "ctrl:nocaps"
 
 # Remove title bars
@@ -225,3 +213,6 @@ bindsym Print exec --no-startup-id maim --select | xclip -selection clipboard -t
 
 # Disable the focus following the mouse
 focus_follows_mouse no
+
+# Autodetect outputs (need to manually run when plugging/unplugging monitor)
+bindsym Ctrl+$mod+r exec "xrandr --auto"
