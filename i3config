@@ -39,7 +39,8 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 exec --no-startup-id blueman-applet &
 
 # Display Setup
-exec --no-startup-id xrandr --output nonprimary --right-of eDP
+exec --no-startup-id xrandr --output DisplayPort-0 --right-of eDP
+exec --no-startup-id xrandr --output HDMI-A-0 --right-of eDP
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
