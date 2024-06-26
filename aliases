@@ -41,6 +41,7 @@ alias whquery="bq query --use_legacy_sql=false"
 # tmux
 alias ta="~/workspace/xavierosee/dotfiles/bin/tat"
 
-# molecule
+# mention stuff
 alias molecule="~/workspace/mentionapp/ansible/molecule/config/bash_wrapper"
+alias extmon="xrandr --output HDMI-A-0 --right-of eDP && xrandr --output DisplayPort-0 --right-of eDP"
 
