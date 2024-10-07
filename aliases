@@ -2,7 +2,7 @@
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
-alias ll='ls -lAFh'                         # Preferred 'ls' implementation
+alias ll='ls -lGAFh'                         # Preferred 'ls' implementation
 alias la='ls -Al'               	    # show hidden files
 alias less='less -FSRXc'                    # Preferred 'less' implementation
 alias nano='nano -W'                        # Preferred 'nano' implementation
@@ -33,15 +33,11 @@ alias pip="python -m pip"
 alias top="htop"
 alias vim="nvim"
 alias systup="sudo apt update && sudo apt upgrade -y"
-
-
-# BigQuery shortcuts
-alias whquery="bq query --use_legacy_sql=false"
+alias bat="batcat"
 
 # tmux
-alias ta="~/workspace/xavierosee/dotfiles/bin/tat"
+alias ta="~/workspaces/xavierosee/dotfiles/bin/tat"
 
-# mention stuff
-alias molecule="~/workspace/mentionapp/ansible/molecule/config/bash_wrapper"
-alias extmon="xrandr --output HDMI-A-0 --right-of eDP && xrandr --output DisplayPort-0 --right-of eDP"
-
+# redbull
+alias notes="vim ~/workspaces/redbull/notes"
+alias todo="grep -re '^- \[' ~/workspaces/redbull/notes | grep -ve '- \[x\]' | grep -ve '- \[?\]'"

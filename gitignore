@@ -14,6 +14,11 @@ npm-debug.log
 
 # Python
 **/.python-version
+/build
+
+# Perosnal test files
+**/test.ipynb
+**/test.sql
 
 # vi
 *~

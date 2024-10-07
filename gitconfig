@@ -29,6 +29,9 @@
 [branch "main"]
   mergeoptions = --no-edit
 
+[branch "master"]
+  mergeoptions = --no-edit
+
 [color]
   branch = auto
   diff = auto
@@ -70,5 +73,5 @@
   default = current
 
 [user]
-  email = xavier@xavierrosee.com
-  name = Xavier Rosee
+	email = xavier.rosee@redbull.com
+	name = Xavier Rosee

@@ -103,9 +103,9 @@ if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
 
-#if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [[ -z "$TMUX" ]]; then
-#   ta 
-#fi
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [[ -z "$TMUX" ]]; then
+   ta 
+fi
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -203,12 +203,5 @@ export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# Mention Ansible x Molecule
-alias molecule='/home/xavierosee/workspaces/mentionapp/ansible/molecule/config/bash_wrapper'
-export VAGRANT_DEFAULT_PROVIDER=virtualbox
-
-# installed by dev-env.sh
-[ -f "/home/xavierosee/workspaces/mentionapp/mention/dev-env/config/rc_files/bashrc" ] && { source "/home/xavierosee/workspaces/mentionapp/mention/dev-env/config/rc_files/bashrc"; }
-
-# Update PATH for Nix
-export PATH=$PATH:/nix/var/nix/profiles/default/bin
+# enable WSL to open Windows browser
+export BROWSER=wslview
