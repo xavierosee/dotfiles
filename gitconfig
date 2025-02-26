@@ -1,4 +1,5 @@
 [alias]
+  ap = add --patch
   co = checkout
   st = status -sb
   br = branch
@@ -75,3 +76,7 @@
 [user]
 	email = xavier.rosee@redbull.com
 	name = Xavier Rosee
+[credential]
+	helper = manager-core
+[url "git@github.com:"]
+	insteadOf = https://github.com/

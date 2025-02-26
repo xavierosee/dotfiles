@@ -32,3 +32,8 @@ npm-debug.log
 
 # VSCode
 **/.vscode/
+
+# Personal test files
+**/test.py
+**/test.sql
+**/test.ipynb
