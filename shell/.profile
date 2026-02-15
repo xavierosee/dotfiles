@@ -15,6 +15,9 @@ export EDITOR=nvim
 export VISUAL=nvim
 export BROWSER=firefox
 
+# Tool config
+export BAT_THEME="GitHub"
+
 # Source bashrc for interactive bash login shells
 if [ -n "$BASH_VERSION" ] && [ -n "$PS1" ]; then
     [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
