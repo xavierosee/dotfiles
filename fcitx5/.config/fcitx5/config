@@ -1,0 +1,12 @@
+[Hotkey]
+TriggerKeys=Alt+Shift_L
+
+[Hotkey/EnumerateForwardKeys]
+0=Alt+Shift_L
+
+[Hotkey/EnumerateBackwardKeys]
+0=Alt+Shift_R
+
+[Behavior]
+DefaultPageSize=5
+ShareInputState=No

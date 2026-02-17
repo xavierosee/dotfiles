@@ -22,7 +22,6 @@
         "memory",
         "temperature",
         "backlight",
-        "sway/language",
         "power-profiles-daemon",
         "battery",
         "privacy",
