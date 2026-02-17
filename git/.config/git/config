@@ -47,7 +47,6 @@
   pager = delta
   editor = nvim
   visual = nvim
-  excludesFile = ~/.gitignore
 
 [delta]
   navigate = true
