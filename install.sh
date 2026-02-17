@@ -6,18 +6,48 @@ DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 TARGET_DIR="$HOME"
 BACKUP_DIR="$TARGET_DIR/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
 
-PACKAGES=(
-    stow
-    shell
-    bash
-    git
-    foot
-    nvim
-    sway
-    swaylock
-    wallpapers
-    waybar
+# Override map — only exceptions to the default `command -v <pkg>` check
+declare -A PACKAGE_OVERRIDES=(
+    [shell]=always
+    [systemd]=systemd
+    [wallpapers]=prompt
 )
+
+# Auto-discover packages: all directories at the repo root
+mapfile -t PACKAGES < <(find "$DOTFILES_DIR" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -printf '%f\n' | sort)
+
+should_install() {
+    local pkg="$1"
+    local override="${PACKAGE_OVERRIDES[$pkg]:-}"
+
+    case "$override" in
+        always)
+            return 0
+            ;;
+        systemd)
+            if [ -d /run/systemd/system ]; then
+                return 0
+            fi
+            echo "[$pkg] skipped (not a systemd system)"
+            return 1
+            ;;
+        prompt)
+            read -rp "[$pkg] Install? [y/N] " answer
+            if [[ "$answer" =~ ^[Yy]$ ]]; then
+                return 0
+            fi
+            echo "[$pkg] skipped (user declined)"
+            return 1
+            ;;
+        *)
+            if command -v "$pkg" &>/dev/null; then
+                return 0
+            fi
+            echo "[$pkg] skipped (not installed)"
+            return 1
+            ;;
+    esac
+}
 
 backup_conflicts() {
     local pkg="$1"
@@ -57,8 +87,7 @@ if ! command -v stow &>/dev/null; then
 fi
 
 for pkg in "${PACKAGES[@]}"; do
-    if [ ! -d "$DOTFILES_DIR/$pkg" ]; then
-        echo "[$pkg] skipped (not found)"
+    if ! should_install "$pkg"; then
         continue
     fi
 
