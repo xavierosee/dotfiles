@@ -11,6 +11,7 @@ PACKAGES=(
     shell
     bash
     git
+    foot
     nvim
     sway
     swaylock
