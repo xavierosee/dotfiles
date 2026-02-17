@@ -1,0 +1,16 @@
+{
+    "editor.fontFamily": "'Julia Mono', monospace",
+    "claudeCode.preferredLocation": "panel",
+    "claudeCode.selectedModel": "opus",
+    "makefile.configureOnOpen": true,
+    "editor.formatOnSave": true,
+    "files.autoSave": "onFocusChange",
+    "editor.defaultFormatter": "Anthropic.claude-code",
+    "editor.wordWrap": "on",
+    "workbench.colorTheme": "GitHub Light Default",
+    "editor.formatOnPaste": true,
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "workbench.commandPalette.experimental.suggestCommands": true,
+    "terminal.external.linuxExec": "foot",
+    "chat.disableAIFeatures": true
+}
