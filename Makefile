@@ -4,7 +4,10 @@ TARGET_DIR   := $(HOME)
 BACKUP_DIR   := $(TARGET_DIR)/.dotfiles_backup/$(shell date +%Y%m%d_%H%M%S)
 PACKAGES     := $(sort $(shell find "$(DOTFILES_DIR)" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -printf '%f\n'))
 
-.PHONY: install stow
+# Packages that aren't stowable (not targeting $HOME)
+NOSTOW := keyd
+
+.PHONY: install stow keyd
 
 install:
 	@command -v stow >/dev/null 2>&1 || { echo "Error: stow is not installed. Run: sudo dnf install stow"; exit 1; }
@@ -14,6 +17,7 @@ install:
 	for pkg in $(PACKAGES); do \
 		skip=false; \
 		case "$$pkg" in \
+			keyd) skip=true ;; \
 			shell) ;; \
 			systemd) \
 				if [ ! -d /run/systemd/system ]; then \
@@ -57,6 +61,13 @@ install:
 	if [ "$$backup_needed" = true ]; then \
 		echo "Backups saved to: $(BACKUP_DIR)"; \
 	fi
+	@if command -v keyd >/dev/null 2>&1; then $(MAKE) keyd; else echo "[keyd] skipped (not installed)"; fi
+
+keyd:
+	@command -v keyd >/dev/null 2>&1 || { echo "Error: keyd is not installed. Run: sudo dnf install keyd"; exit 1; }
+	sudo cp "$(DOTFILES_DIR)/keyd/default.conf" /etc/keyd/default.conf
+	sudo keyd reload
+	@echo "[keyd] installed and reloaded"
 
 PKG := $(word 2, $(MAKECMDGOALS))
 
