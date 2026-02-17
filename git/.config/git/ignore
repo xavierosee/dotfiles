@@ -39,3 +39,5 @@ npm-debug.log
 **/test.ipynb
 
 **/.claude/
+
+**/.claude/settings.local.json

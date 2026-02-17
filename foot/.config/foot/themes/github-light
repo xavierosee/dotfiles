@@ -1,0 +1,28 @@
+# GitHub Light — ported from projekt0n/github-nvim-theme
+[colors]
+background=d0d7de
+foreground=1f2328
+
+## Normal colors (palette 0-7)
+regular0=24292f  # black
+regular1=cf222e  # red
+regular2=116329  # green
+regular3=4d2d00  # yellow
+regular4=0969da  # blue
+regular5=8250df  # magenta
+regular6=1b7c83  # cyan
+regular7=6e7781  # white
+
+## Bright colors (palette 8-15)
+bright0=57606a   # bright black
+bright1=a40e26   # bright red
+bright2=1a7f37   # bright green
+bright3=633c01   # bright yellow
+bright4=218bff   # bright blue
+bright5=a475f9   # bright magenta
+bright6=3192aa   # bright cyan
+bright7=8c959f   # bright white
+
+## UI
+selection-foreground=1f2328
+selection-background=ddf4ff
