@@ -12,5 +12,6 @@
     "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
     "workbench.commandPalette.experimental.suggestCommands": true,
     "terminal.external.linuxExec": "foot",
-    "chat.disableAIFeatures": true
+    "chat.disableAIFeatures": true,
+    "explorer.confirmDelete": false
 }
