@@ -5,9 +5,9 @@ BACKUP_DIR   := $(TARGET_DIR)/.dotfiles_backup/$(shell date +%Y%m%d_%H%M%S)
 PACKAGES     := $(sort $(shell find "$(DOTFILES_DIR)" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -printf '%f\n'))
 
 # Packages that aren't stowable (not targeting $HOME)
-NOSTOW := keyd
+NOSTOW := keyd systemd
 
-.PHONY: install stow keyd
+.PHONY: install stow keyd systemd
 
 install:
 	@command -v stow >/dev/null 2>&1 || { echo "Error: stow is not installed. Run: sudo dnf install stow"; exit 1; }
@@ -17,13 +17,8 @@ install:
 	for pkg in $(PACKAGES); do \
 		skip=false; \
 		case "$$pkg" in \
-			keyd) skip=true ;; \
+			keyd|systemd) skip=true ;; \
 			shell) ;; \
-			systemd) \
-				if [ ! -d /run/systemd/system ]; then \
-					echo "[$$pkg] skipped (not a systemd system)"; \
-					skip=true; \
-				fi ;; \
 			wallpapers) \
 				printf "[$$pkg] Install? [y/N] "; \
 				read answer; \
@@ -61,7 +56,15 @@ install:
 	if [ "$$backup_needed" = true ]; then \
 		echo "Backups saved to: $(BACKUP_DIR)"; \
 	fi
+	@if [ -d /run/systemd/system ]; then $(MAKE) systemd; else echo "[systemd] skipped (not a systemd system)"; fi
 	@if command -v keyd >/dev/null 2>&1; then $(MAKE) keyd; else echo "[keyd] skipped (not installed)"; fi
+
+systemd:
+	@[ -d /run/systemd/system ] || { echo "Error: not a systemd system"; exit 1; }
+	sudo mkdir -p /etc/systemd/logind.conf.d
+	sudo cp "$(DOTFILES_DIR)/systemd/logind.conf.d/lid-switch.conf" /etc/systemd/logind.conf.d/lid-switch.conf
+	sudo systemctl restart systemd-logind
+	@echo "[systemd] logind config installed"
 
 keyd:
 	@command -v keyd >/dev/null 2>&1 || { echo "Error: keyd is not installed. Run: sudo dnf install keyd"; exit 1; }
