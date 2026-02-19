@@ -3,6 +3,7 @@
 # PATH
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
+[ -d "$HOME/.npm-global" ] && PATH="$HOME/.npm-global:$PATH"
 
 # XDG Base Directories
 export XDG_CONFIG_HOME="$HOME/.config"
