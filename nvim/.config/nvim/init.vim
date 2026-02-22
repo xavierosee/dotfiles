@@ -15,31 +15,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'jiangmiao/auto-pairs'
-Plug 'numirias/semshi'
-Plug 'dense-analysis/ale'
-Plug 'davidhalter/jedi-vim'
-Plug 'junegunn/vim-emoji'
 Plug 'elzr/vim-json'
 Plug 'ervandew/supertab'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'honza/vim-snippets'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline'
-" Plugins - Python
-Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'jeetsukumaran/vim-pythonsense'
-Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
-" PLugins - Tmux
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'christoomey/vim-tmux-runner'
-Plug 'kien/ctrlp.vim'
-" Plugins - Flutter
-Plug 'dart-lang/dart-vim-plugin'
-Plug 'natebosch/dartlang-snippets'
-Plug 'thosakwe/vim-flutter'
-Plug 'natebosch/vim-lsc'
-Plug 'natebosch/vim-lsc-dart'
 
 call plug#end()
 
