@@ -63,8 +63,8 @@ systemd:
 	@[ -d /run/systemd/system ] || { echo "Error: not a systemd system"; exit 1; }
 	sudo mkdir -p /etc/systemd/logind.conf.d
 	sudo cp "$(DOTFILES_DIR)/systemd/logind.conf.d/lid-switch.conf" /etc/systemd/logind.conf.d/lid-switch.conf
-	sudo systemctl restart systemd-logind
-	@echo "[systemd] logind config installed"
+	sudo systemctl daemon-reload
+	@echo "[systemd] logind config installed (reboot or 'sudo systemctl restart systemd-logind' to apply)"
 
 keyd:
 	@command -v keyd >/dev/null 2>&1 || { echo "Error: keyd is not installed. Run: sudo dnf install keyd"; exit 1; }
