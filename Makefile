@@ -7,7 +7,7 @@ PACKAGES     := $(sort $(shell find "$(DOTFILES_DIR)" -mindepth 1 -maxdepth 1 -t
 # Packages that aren't stowable (not targeting $HOME)
 NOSTOW := keyd systemd
 
-.PHONY: install stow keyd systemd
+.PHONY: install stow keyd systemd macos
 
 install:
 	@command -v stow >/dev/null 2>&1 || { echo "Error: stow is not installed. Run: sudo dnf install stow"; exit 1; }
@@ -22,6 +22,10 @@ install:
 			mimeapps) \
 				if [ "$$(uname)" != "Linux" ]; then \
 					echo "[$$pkg] skipped (not Linux)"; skip=true; \
+				fi ;; \
+			macos) \
+				if [ "$$(uname)" != "Darwin" ]; then \
+					echo "[$$pkg] skipped (not macOS)"; skip=true; \
 				fi ;; \
 			wallpapers) \
 				printf "[$$pkg] Install? [y/N] "; \
@@ -62,6 +66,7 @@ install:
 	fi
 	@if [ -d /run/systemd/system ]; then $(MAKE) systemd; else echo "[systemd] skipped (not a systemd system)"; fi
 	@if command -v keyd >/dev/null 2>&1; then $(MAKE) keyd; else echo "[keyd] skipped (not installed)"; fi
+	@if [ "$$(uname)" = "Darwin" ]; then $(MAKE) macos; fi
 
 systemd:
 	@[ -d /run/systemd/system ] || { echo "Error: not a systemd system"; exit 1; }
@@ -71,6 +76,11 @@ systemd:
 	@echo "[systemd] logind config installed (reboot or 'sudo systemctl restart systemd-logind' to apply)"
 	systemctl --user enable --now ssh-agent.socket
 	@echo "[systemd] ssh-agent.socket enabled"
+
+macos:
+	@[ "$$(uname)" = "Darwin" ] || { echo "Error: not macOS"; exit 1; }
+	launchctl bootstrap gui/$$(id -u) "$(HOME)/Library/LaunchAgents/com.user.ssh-add.plist" 2>/dev/null || true
+	@echo "[macos] ssh-add LaunchAgent loaded"
 
 keyd:
 	@command -v keyd >/dev/null 2>&1 || { echo "Error: keyd is not installed. Run: sudo dnf install keyd"; exit 1; }
