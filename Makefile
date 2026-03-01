@@ -69,6 +69,8 @@ systemd:
 	sudo cp "$(DOTFILES_DIR)/systemd/logind.conf.d/lid-switch.conf" /etc/systemd/logind.conf.d/lid-switch.conf
 	sudo systemctl daemon-reload
 	@echo "[systemd] logind config installed (reboot or 'sudo systemctl restart systemd-logind' to apply)"
+	systemctl --user enable --now ssh-agent.socket
+	@echo "[systemd] ssh-agent.socket enabled"
 
 keyd:
 	@command -v keyd >/dev/null 2>&1 || { echo "Error: keyd is not installed. Run: sudo dnf install keyd"; exit 1; }
