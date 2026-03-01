@@ -11,7 +11,7 @@ fi
 sudo dnf install -y \
     stow neovim git git-delta sway waybar swaylock swayidle rofi foot fcitx5 fcitx5-chinese-addons keyd \
     bat fzf htop jq upower python3 \
-    pipewire wireplumber pipewire-pulseaudio pavucontrol wl-clipboard grim slurp xdg-desktop-portal-wlr polkit-gnome power-profiles-daemon brightnessctl \
+    pipewire wireplumber pipewire-pulseaudio pavucontrol wl-clipboard grim slurp xdg-desktop-portal-wlr power-profiles-daemon brightnessctl \
     firefox zathura zathura-pdf-poppler darktable tailscale
 
 # Install prettyping (not in Fedora repos)
