@@ -18,7 +18,11 @@ install:
 		skip=false; \
 		case "$$pkg" in \
 			keyd|systemd) skip=true ;; \
-			shell) ;; \
+			shell|session) ;; \
+			mimeapps) \
+				if [ "$$(uname)" != "Linux" ]; then \
+					echo "[$$pkg] skipped (not Linux)"; skip=true; \
+				fi ;; \
 			wallpapers) \
 				printf "[$$pkg] Install? [y/N] "; \
 				read answer; \

@@ -3,7 +3,6 @@
 # -----------------------------------------------------
 alias cp='cp -iv'
 alias mv='mv -iv'
-alias rm='rm -I'
 alias mkdir='mkdir -pv'
 alias less='less -FSRXc'
 alias wget='wget -c'
@@ -13,11 +12,22 @@ alias du='du -h'
 alias dud='du -d 1 -h | sort -h'
 
 # -----------------------------------------------------
-# Listing
+# OS-specific
 # -----------------------------------------------------
-alias ls='ls --color=auto'
-alias ll='ls -lAFh --color=auto'
-alias la='ls -Al --color=auto'
+if [ "$(uname)" = "Darwin" ]; then
+    alias rm='rm -i'
+    alias ls='ls -G'
+    alias ll='ls -lAFhG'
+    alias la='ls -AlG'
+else
+    alias rm='rm -I'
+    alias ls='ls --color=auto'
+    alias ll='ls -lAFh --color=auto'
+    alias la='ls -Al --color=auto'
+    alias sc='systemctl'
+    alias scu='systemctl --user'
+    alias jc='journalctl -xe'
+fi
 
 # -----------------------------------------------------
 # Navigation
@@ -44,13 +54,6 @@ alias gl='git pull'
 alias glg='git log --oneline --graph -20'
 alias gst='git stash'
 alias gstp='git stash pop'
-
-# -----------------------------------------------------
-# Systemd
-# -----------------------------------------------------
-alias sc='systemctl'
-alias scu='systemctl --user'
-alias jc='journalctl -xe'
 
 # -----------------------------------------------------
 # Command Replacements
