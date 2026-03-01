@@ -5,9 +5,9 @@ BACKUP_DIR   := $(TARGET_DIR)/.dotfiles_backup/$(shell date +%Y%m%d_%H%M%S)
 PACKAGES     := $(sort $(shell find "$(DOTFILES_DIR)" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -printf '%f\n'))
 
 # Packages that aren't stowable (not targeting $HOME)
-NOSTOW := keyd systemd
+NOSTOW := keyd systemd packages
 
-.PHONY: install stow keyd systemd macos
+.PHONY: install stow keyd systemd macos bootstrap-t2 bootstrap-pink bootstrap-macos
 
 install:
 	@command -v stow >/dev/null 2>&1 || { echo "Error: stow is not installed. Run: sudo dnf install stow"; exit 1; }
@@ -17,7 +17,7 @@ install:
 	for pkg in $(PACKAGES); do \
 		skip=false; \
 		case "$$pkg" in \
-			keyd|systemd) skip=true ;; \
+			keyd|systemd|packages) skip=true ;; \
 			shell|session) ;; \
 			mimeapps) \
 				if [ "$$(uname)" != "Linux" ]; then \
@@ -81,6 +81,21 @@ macos:
 	@[ "$$(uname)" = "Darwin" ] || { echo "Error: not macOS"; exit 1; }
 	launchctl bootstrap gui/$$(id -u) "$(HOME)/Library/LaunchAgents/com.user.ssh-add.plist" 2>/dev/null || true
 	@echo "[macos] ssh-add LaunchAgent loaded"
+
+bootstrap-t2:
+	@[ "$$(uname)" = "Linux" ] || { echo "Error: bootstrap-t2 is for Linux"; exit 1; }
+	@sh "$(DOTFILES_DIR)/packages/t2.sh"
+	@$(MAKE) install
+
+bootstrap-pink:
+	@[ "$$(uname)" = "Linux" ] || { echo "Error: bootstrap-pink is for Linux"; exit 1; }
+	@sh "$(DOTFILES_DIR)/packages/pink.sh"
+	@$(MAKE) install
+
+bootstrap-macos:
+	@[ "$$(uname)" = "Darwin" ] || { echo "Error: bootstrap-macos is for macOS"; exit 1; }
+	@sh "$(DOTFILES_DIR)/packages/macos.sh"
+	@$(MAKE) install
 
 keyd:
 	@command -v keyd >/dev/null 2>&1 || { echo "Error: keyd is not installed. Run: sudo dnf install keyd"; exit 1; }
