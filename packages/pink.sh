@@ -5,6 +5,9 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/common-linux.sh"
 
+# Set hostname
+sudo hostnamectl set-hostname pink
+
 # Install Syncthing
 sudo dnf install -y syncthing
 

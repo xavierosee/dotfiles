@@ -8,6 +8,11 @@ if ! command -v brew >/dev/null 2>&1; then
     exit 1
 fi
 
+# Set hostname
+sudo scutil --set HostName macos
+sudo scutil --set ComputerName macos
+sudo scutil --set LocalHostName macos
+
 brew install neovim git git-delta bat fzf htop jq prettyping
 
 brew install --cask tailscale

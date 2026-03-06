@@ -5,6 +5,9 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/common-linux.sh"
 
+# Set hostname
+sudo hostnamectl set-hostname t2
+
 # Add T2 COPR (idempotent: -y skips the confirmation prompt)
 sudo dnf -y copr enable t2linux/t2linux
 
