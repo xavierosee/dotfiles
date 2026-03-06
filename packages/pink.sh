@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 sudo hostnamectl set-hostname pink
 
 # Install Syncthing
-sudo dnf install -y syncthing
+sudo dnf install -y power-profiles-daemon syncthing
 
 # Enable as user service (not system-wide — laptop, not a server)
 systemctl --user enable --now syncthing
