@@ -5,9 +5,9 @@ BACKUP_DIR   := $(TARGET_DIR)/.dotfiles_backup/$(shell date +%Y%m%d_%H%M%S)
 PACKAGES     := $(sort $(shell find "$(DOTFILES_DIR)" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -printf '%f\n'))
 
 # Packages that aren't stowable (not targeting $HOME)
-NOSTOW := keyd systemd packages
+NOSTOW := keyd sddm systemd packages
 
-.PHONY: install stow keyd systemd macos bootstrap-t2 bootstrap-pink bootstrap-macos
+.PHONY: install stow keyd sddm systemd macos bootstrap-t2 bootstrap-pink bootstrap-macos
 
 install:
 	@command -v stow >/dev/null 2>&1 || { echo "Error: stow is not installed. Run: sudo dnf install stow"; exit 1; }
@@ -17,7 +17,7 @@ install:
 	for pkg in $(PACKAGES); do \
 		skip=false; \
 		case "$$pkg" in \
-			keyd|systemd|packages) skip=true ;; \
+			keyd|sddm|systemd|packages) skip=true ;; \
 			shell|session) ;; \
 			mimeapps) \
 				if [ "$$(uname)" != "Linux" ]; then \
@@ -66,6 +66,7 @@ install:
 	fi
 	@if [ -d /run/systemd/system ]; then $(MAKE) systemd; else echo "[systemd] skipped (not a systemd system)"; fi
 	@if command -v keyd >/dev/null 2>&1; then $(MAKE) keyd; else echo "[keyd] skipped (not installed)"; fi
+	@if command -v sddm >/dev/null 2>&1; then $(MAKE) sddm; else echo "[sddm] skipped (not installed)"; fi
 	@if [ "$$(uname)" = "Darwin" ]; then $(MAKE) macos; fi
 
 systemd:
@@ -102,6 +103,13 @@ keyd:
 	sudo cp "$(DOTFILES_DIR)/keyd/default.conf" /etc/keyd/default.conf
 	sudo keyd reload
 	@echo "[keyd] installed and reloaded"
+
+sddm:
+	@command -v sddm >/dev/null 2>&1 || { echo "Error: sddm is not installed. Run: sudo dnf install sddm"; exit 1; }
+	sudo cp "$(DOTFILES_DIR)/sddm/sddm.conf" /etc/sddm.conf
+	sudo mkdir -p /usr/share/sddm/themes
+	sudo cp -r "$(DOTFILES_DIR)/sddm/themes/where_is_my_sddm_theme" /usr/share/sddm/themes/
+	@echo "[sddm] config and theme installed"
 
 PKG := $(word 2, $(MAKECMDGOALS))
 
