@@ -22,5 +22,8 @@ chmod +x "$HOME/.local/bin/prettyping"
 # Enable Tailscale
 sudo systemctl enable --now tailscaled
 
+# Enable SSH
+sudo systemctl enable --now sshd
+
 echo ""
 echo ">>> Run 'sudo tailscale up' to authenticate this machine with Tailscale."
