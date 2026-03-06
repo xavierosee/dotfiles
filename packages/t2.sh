@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/common-linux.sh"
 
 # Set hostname
-sudo hostnamectl set-hostname t2
+sudo hostnamectl set-hostname clamshell
 
 # Add T2 COPR (idempotent: -y skips the confirmation prompt)
 # May fail if t2linux COPR doesn't support this Fedora version yet
