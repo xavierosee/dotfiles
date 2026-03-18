@@ -31,6 +31,5 @@ if [ -n "$BASH_VERSION" ] && [ -n "$PS1" ]; then
     [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 fi
 
-# Machine-local secrets (not tracked in git)
-[ -f "$HOME/.profile.local" ] && . "$HOME/.profile.local"
+
 
