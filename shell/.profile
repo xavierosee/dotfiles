@@ -31,6 +31,5 @@ if [ -n "$BASH_VERSION" ] && [ -n "$PS1" ]; then
     [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 fi
 
-Iasmin GitHub token for API access
-export IASMIN_GITHUB_TOKEN="$(grep 'github_pat' ~/workspaces/zeroclaw/.zeroclaw/config.toml | cut -d'"' -f2)"
+
 
