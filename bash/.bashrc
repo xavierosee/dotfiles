@@ -81,4 +81,4 @@ if [ -d "$HOME/.pyenv" ]; then
     }
 fi
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
