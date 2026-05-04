@@ -52,6 +52,10 @@ Conflicting files are backed up to `~/.dotfiles_backup/<timestamp>/` before stow
 
 If the package name isn't an installed command, add a special case in the `install` target (like `shell` or `mimeapps`).
 
+### Always-stowed packages (no command check)
+
+- `shell`, `session`, `bin` — stowed unconditionally on all Linux machines
+
 ## Notable non-tracked files
 
 - `fcitx5/.config/fcitx5/profile` — fcitx5 rewrites this at runtime on every input method switch; don't track it.
@@ -66,6 +70,22 @@ Config lives in `sway/.config/sway/config.d/` and is loaded in numbered order:
 - `70-window-rules.conf` — per-app rules
 - `80-theme.conf` — font (JuliaMono SemiBold 10pt), borders
 - `90-bar.conf` / `90-swayidle.conf` — waybar and idle/power management
+
+## Machine state — pink
+
+Known quirks and deferred work for the travel laptop (MacBook9,1 / Early 2016 12"):
+
+**Waybar startup delay** (`waybar/.config/systemd/user/waybar.service.d/delay.conf`)
+Waybar crashed 5× on 2026-05-02 due to a hotplug race: sway removed `eDP-1` while waybar was mid-init on a dual-monitor session. Fixed with a 2-second `ExecStartPre` delay. This is an upstream waybar bug — not a config issue.
+
+**Bluetooth firmware — deferred**
+Chip: BCM4350C0 on SPI (`hci_uart_bcm serial1-0`). Kernel wants `brcm/BCM.hcd` but no distro package provides it for this model. Must be extracted from macOS: `/usr/share/firmware/bluetooth/` on a macOS volume for MacBook9,1, then placed at `/lib/firmware/brcm/BCM.hcd`. Bluetooth is non-functional until then.
+
+**Blueman stale iterator**
+blueman 2.4.6-4.fc43 crashes with `TypeError: Invalid type` in `GenericList.py:109` when a previously-paired device is absent. Workaround: remove and re-pair the offending device in Bluetooth settings. Known upstream bug, no patch merged.
+
+**ABRT triage framework** (`bin/` package)
+Monthly cron on the 1st calls `abrt-triage-cron` → saves a Claude-generated report to `~/.local/share/abrt-triage/` and sends a desktop notification. Run `abrt-review` interactively to triage and delete resolved reports.
 
 ## SSH agent
 

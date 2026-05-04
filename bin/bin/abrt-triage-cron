@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Non-interactive monthly ABRT triage. Called from cron.
+# Runs abrt-triage, asks Claude for analysis, saves a report, and notifies via desktop.
+
+set -euo pipefail
+
+REPORT_DIR="$HOME/.local/share/abrt-triage"
+DATE=$(date '+%Y-%m-%d')
+REPORT_FILE="$REPORT_DIR/$DATE.md"
+
+mkdir -p "$REPORT_DIR"
+
+triage=$("$HOME/bin/abrt-triage" 2>&1)
+
+if grep -q "Queue is clean" <<< "$triage"; then
+    echo "$DATE: No crash reports." >> "$REPORT_DIR/history.log"
+    exit 0
+fi
+
+count=$(grep -c '^---' <<< "$triage" || true)
+
+prompt="You are a system analyst triaging ABRT crash reports on a Fedora 43 machine.
+
+Triage report:
+
+$triage
+
+For each crash marked 'SAME VERSION', search briefly for upstream bug status.
+
+Write a concise markdown report with three sections:
+## Safe to Delete
+(package updated since crash — list ID, component, why it's safe)
+
+## Needs Investigation
+(same version still installed — list ID, component, upstream bug status if found)
+
+## Unknown
+(package lookup failed)
+
+End with a one-line summary like: '3 safe to delete, 1 needs investigation, 0 unknown.'
+Do not include deletion commands — those will be run interactively by the user via abrt-review."
+
+echo "# ABRT Triage — $DATE" > "$REPORT_FILE"
+echo "" >> "$REPORT_FILE"
+claude --dangerously-skip-permissions -p "$prompt" >> "$REPORT_FILE" 2>&1
+
+summary=$(grep -oP '\d+ safe to delete.*' "$REPORT_FILE" | tail -1 || echo "$count report(s) pending review")
+
+echo "$DATE: $summary — $REPORT_FILE" >> "$REPORT_DIR/history.log"
+
+# Desktop notification (best-effort; may silently fail if no session)
+if command -v notify-send &>/dev/null; then
+    DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus" \
+        notify-send -a "ABRT Triage" -i dialog-warning \
+        "Monthly crash report ready" \
+        "$summary — run 'abrt-review' to triage" 2>/dev/null || true
+fi
