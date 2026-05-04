@@ -4,8 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Agentic coding conventions
 
-- **Never commit directly to `main`.** Always create a branch, push it, and open a PR. No exceptions, even for trivial changes.
-- **Use [Conventional Commits](https://www.conventionalcommits.org/) for all commit messages.** Format: `type(scope): description` — e.g. `feat(waybar): add startup delay drop-in`, `fix(bin): handle missing abrt-cli gracefully`, `chore(claude): expand settings.json allowlist`. Common types: `feat`, `fix`, `chore`, `refactor`, `docs`, `style`, `test`.
+See [AGENTS.md](AGENTS.md) — conventions there apply to all agents and are the source of truth.
 
 ## What this repo is
 
