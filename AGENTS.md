@@ -6,6 +6,8 @@ These apply to all agents working in this repository.
 
 **Never commit directly to `main`.** Always create a branch, push it, and open a PR — no exceptions, even for trivial changes.
 
+**Keep PR descriptions current.** Any time a new commit is pushed to a PR branch, update the PR body to reflect the current state of the changes.
+
 ## Commit messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) for every commit: `type(scope): description`
