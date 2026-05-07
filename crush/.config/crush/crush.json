@@ -3,31 +3,31 @@
   "providers": {
     "tensorix": {
       "type": "openai",
-      "base_url": "https://api.tensorix.ai/v1",
-      "api_key": "$TENSORIX_API_KEY",
+      "base_url": "http://127.0.0.1:4000/v1",
+      "api_key": "sk-litellm",
       "models": [
         {
-          "id": "z-ai/glm-5.1",
+          "id": "glm-5.1",
           "name": "GLM-5.1 (default)",
           "context_window": 200000,
           "default_max_tokens": 16000,
           "can_reason": true
         },
         {
-          "id": "deepseek/deepseek-v4-pro",
+          "id": "deepseek-v4-pro",
           "name": "DeepSeek V4 Pro (reasoning)",
           "context_window": 164000,
           "default_max_tokens": 16000,
           "can_reason": true
         },
         {
-          "id": "deepseek/deepseek-v4-flash",
+          "id": "deepseek-v4-flash",
           "name": "DeepSeek V4 Flash (cheap/fast)",
           "context_window": 128000,
           "default_max_tokens": 8000
         },
         {
-          "id": "moonshotai/Kimi-K2.6",
+          "id": "kimi-k2.6",
           "name": "Kimi K2.6 (long context)",
           "context_window": 262000,
           "default_max_tokens": 16000
