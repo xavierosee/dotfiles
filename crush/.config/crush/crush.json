@@ -27,7 +27,7 @@
           "default_max_tokens": 8000
         },
         {
-          "id": "moonshotai/kimi-k2.6",
+          "id": "moonshotai/Kimi-K2.6",
           "name": "Kimi K2.6 (long context)",
           "context_window": 262000,
           "default_max_tokens": 16000
