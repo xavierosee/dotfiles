@@ -95,3 +95,15 @@ Monthly cron on the 1st calls `abrt-triage-cron` → saves a Claude-generated re
 
 - **Linux**: systemd user socket (`ssh-agent.socket`); socket path via `session/.config/environment.d/ssh-agent.conf`
 - **macOS**: LaunchAgent in `macos/Library/LaunchAgents/com.user.ssh-add.plist` loads keys from Keychain at login
+
+<!-- vault:start:pointer -->
+**Knowledge vault — read this for conventions, patterns, runbooks:**
+
+```
+vault: ../code-vault
+vault-absolute: /home/xavierosee/workspaces/perso/code-vault
+```
+
+The vault's own `AGENTS.md` lists every available note with one-line summaries. Read it first.
+
+<!-- vault:end:pointer -->

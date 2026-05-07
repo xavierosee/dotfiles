@@ -19,3 +19,16 @@ Examples:
 - `fix(bin): handle missing abrt-cli gracefully`
 - `chore(claude): expand settings.json allowlist`
 - `docs(claude): add agentic coding conventions`
+
+<!-- vault:start:pointer -->
+**Knowledge vault — read this for conventions, patterns, runbooks:**
+
+```
+vault: ../code-vault
+vault-absolute: /home/xavierosee/workspaces/perso/code-vault
+```
+
+The vault's own `AGENTS.md` lists every available note with one-line summaries. Read it first.
+
+<!-- vault:end:pointer -->
+
