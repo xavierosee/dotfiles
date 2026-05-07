@@ -5,7 +5,7 @@ BACKUP_DIR   := $(TARGET_DIR)/.dotfiles_backup/$(shell date +%Y%m%d_%H%M%S)
 PACKAGES     := $(sort $(shell find "$(DOTFILES_DIR)" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -printf '%f\n'))
 
 # Packages that aren't stowable (not targeting $HOME)
-NOSTOW := keyd sddm systemd packages
+NOSTOW := keyd sddm systemd packages bootstrap
 
 .PHONY: install stow keyd sddm systemd macos bootstrap-t2 bootstrap-pink bootstrap-macos
 
@@ -17,7 +17,7 @@ install:
 	for pkg in $(PACKAGES); do \
 		skip=false; \
 		case "$$pkg" in \
-			keyd|sddm|systemd|packages) skip=true ;; \
+			keyd|sddm|systemd|packages|bootstrap) skip=true ;; \
 			bin|shell|session) ;; \
 			mimeapps) \
 				if [ "$$(uname)" != "Linux" ]; then \

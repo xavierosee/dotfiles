@@ -1,0 +1,63 @@
+{
+  "$schema": "https://charm.land/crush.json",
+  "providers": {
+    "tensorix": {
+      "type": "openai",
+      "base_url": "https://api.tensorix.ai/v1",
+      "api_key": "$TENSORIX_API_KEY",
+      "models": [
+        {
+          "id": "z-ai/glm-5.1",
+          "name": "GLM-5.1 (default)",
+          "context_window": 200000,
+          "default_max_tokens": 16000,
+          "can_reason": true
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek V4 Pro (reasoning)",
+          "context_window": 164000,
+          "default_max_tokens": 16000,
+          "can_reason": true
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash",
+          "name": "DeepSeek V4 Flash (cheap/fast)",
+          "context_window": 128000,
+          "default_max_tokens": 8000
+        },
+        {
+          "id": "moonshotai/kimi-k2.6",
+          "name": "Kimi K2.6 (long context)",
+          "context_window": 262000,
+          "default_max_tokens": 16000
+        }
+      ]
+    }
+  },
+  "lsp": {
+    "python": {
+      "command": "pyright-langserver",
+      "args": ["--stdio"]
+    },
+    "typescript": {
+      "command": "npx",
+      "args": ["-y", "typescript-language-server", "--stdio"]
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"]
+    },
+    "yaml": {
+      "command": "npx",
+      "args": ["-y", "yaml-language-server", "--stdio"]
+    }
+  },
+  "permissions": {
+    "allowed_tools": ["ls", "rg", "git", "dbt", "pytest", "uv", "pip"]
+  },
+  "options": {
+    "disable_provider_auto_update": false,
+    "debug": false
+  }
+}

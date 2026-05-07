@@ -1,0 +1,16 @@
+[Unit]
+Description=LiteLLM Proxy (Tensorix cache layer)
+After=network.target
+
+[Service]
+Type=simple
+# Pull the Tensorix key from `pass` at start time. Secret is never written to disk.
+ExecStartPre=/bin/sh -c '%h/.local/bin/tensorix-env-systemd.sh > %t/litellm-env'
+EnvironmentFile=%t/litellm-env
+ExecStart=%h/.local/litellm-proxy/venv/bin/litellm --config %h/.config/litellm/config.yaml --port 4000 --host 127.0.0.1
+ExecStopPost=/bin/sh -c 'rm -f %t/litellm-env'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

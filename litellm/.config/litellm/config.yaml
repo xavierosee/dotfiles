@@ -1,0 +1,33 @@
+model_list:
+  - model_name: glm-5.1
+    litellm_params:
+      model: openai/z-ai/glm-5.1
+      api_base: https://api.tensorix.ai/v1
+      api_key: os.environ/TENSORIX_API_KEY
+
+  - model_name: deepseek-v4-pro
+    litellm_params:
+      model: openai/deepseek/deepseek-v4-pro
+      api_base: https://api.tensorix.ai/v1
+      api_key: os.environ/TENSORIX_API_KEY
+
+  - model_name: deepseek-v4-flash
+    litellm_params:
+      model: openai/deepseek/deepseek-v4-flash
+      api_base: https://api.tensorix.ai/v1
+      api_key: os.environ/TENSORIX_API_KEY
+
+  - model_name: kimi-k2.6
+    litellm_params:
+      model: openai/moonshotai/kimi-k2.6
+      api_base: https://api.tensorix.ai/v1
+      api_key: os.environ/TENSORIX_API_KEY
+
+litellm_settings:
+  cache: true
+  cache_params:
+    type: redis
+    host: localhost
+    port: 6379
+    ttl: 3600
+    supported_call_types: ["acompletion", "completion"]
