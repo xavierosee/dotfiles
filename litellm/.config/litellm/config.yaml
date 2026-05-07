@@ -19,7 +19,7 @@ model_list:
 
   - model_name: kimi-k2.6
     litellm_params:
-      model: openai/moonshotai/kimi-k2.6
+      model: openai/moonshotai/Kimi-K2.6
       api_base: https://api.tensorix.ai/v1
       api_key: os.environ/TENSORIX_API_KEY
 

@@ -33,7 +33,8 @@ gpgkey=https://repo.charm.sh/yum/gpg.key" | sudo tee /etc/yum.repos.d/charm.repo
 }
 
 install_packages() {
-  sudo dnf install -y crush pipx bash-language-server nodejs npm redis pass
+  sudo dnf install -y crush pipx bash-language-server nodejs npm redis pass \
+    python3.12
 }
 
 install_lsps() {
@@ -48,10 +49,10 @@ setup_litellm_venv() {
   local venv_dir="$HOME/.local/litellm-proxy"
   if [ ! -d "$venv_dir/venv" ]; then
     mkdir -p "$venv_dir"
-    python3 -m venv "$venv_dir/venv"
+    python3.12 -m venv "$venv_dir/venv"
   fi
   "$venv_dir/venv/bin/pip" install --quiet --upgrade pip
-  "$venv_dir/venv/bin/pip" install --quiet 'litellm[proxy]'
+  "$venv_dir/venv/bin/pip" install --quiet --prefer-binary 'litellm[proxy]'
 }
 
 enable_redis() {
