@@ -95,3 +95,29 @@ Monthly cron on the 1st calls `abrt-triage-cron` → saves a Claude-generated re
 
 - **Linux**: systemd user socket (`ssh-agent.socket`); socket path via `session/.config/environment.d/ssh-agent.conf`
 - **macOS**: LaunchAgent in `macos/Library/LaunchAgents/com.user.ssh-add.plist` loads keys from Keychain at login
+
+<!-- vault:start:pointer -->
+**Knowledge vault — read this for conventions, patterns, runbooks:**
+
+```
+vault: ../code-vault
+vault-absolute: /home/xavierosee/workspaces/perso/code-vault
+```
+
+The vault's own `AGENTS.md` lists every available note with one-line summaries. Read it first.
+
+<!-- vault:end:pointer -->
+
+<!-- vault:start:modes -->
+## Mode switching
+
+When the user types a line of the form `mode: <name>` (case-insensitive, on its own line), read `../code-vault/modes/<name>.md` and follow it for the rest of the session unless told otherwise. Available modes:
+
+- `mode: debug` — Root-cause investigation, no symptom-patching, minimum-viable fix only.
+- `mode: implement` — Write code against an approved plan; small commits; tests with code.
+- `mode: learn` — Capture knowledge into the vault as a new note with frontmatter.
+- `mode: plan` — Read-only exploration; produce a written plan; no edits.
+- `mode: refactor` — Preserve behavior, restructure code; never combine with behavior changes.
+- `mode: review` — Read the diff, surface issues with file:line refs, no edits.
+
+<!-- vault:end:modes -->
