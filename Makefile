@@ -18,7 +18,7 @@ install:
 		skip=false; \
 		case "$$pkg" in \
 			keyd|sddm|systemd|packages) skip=true ;; \
-			shell|session) ;; \
+			bin|shell|session) ;; \
 			mimeapps) \
 				if [ "$$(uname)" != "Linux" ]; then \
 					echo "[$$pkg] skipped (not Linux)"; skip=true; \
@@ -72,9 +72,15 @@ install:
 systemd:
 	@[ -d /run/systemd/system ] || { echo "Error: not a systemd system"; exit 1; }
 	sudo mkdir -p /etc/systemd/logind.conf.d
-	sudo cp "$(DOTFILES_DIR)/systemd/logind.conf.d/lid-switch.conf" /etc/systemd/logind.conf.d/lid-switch.conf
+	@if [ "$$(hostname)" = "pink" ]; then \
+		sudo cp "$(DOTFILES_DIR)/systemd/logind.conf.d/lid-switch-pink.conf" /etc/systemd/logind.conf.d/lid-switch.conf; \
+		echo "[systemd] logind config installed (pink variant: suspend on lid, power key ignored)"; \
+	else \
+		sudo cp "$(DOTFILES_DIR)/systemd/logind.conf.d/lid-switch.conf" /etc/systemd/logind.conf.d/lid-switch.conf; \
+		echo "[systemd] logind config installed"; \
+	fi
 	sudo systemctl daemon-reload
-	@echo "[systemd] logind config installed (reboot or 'sudo systemctl restart systemd-logind' to apply)"
+	@echo "[systemd] (reboot or 'sudo systemctl restart systemd-logind' to apply)"
 	systemctl --user enable --now ssh-agent.socket
 	@echo "[systemd] ssh-agent.socket enabled"
 

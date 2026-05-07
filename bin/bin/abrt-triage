@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Produces a structured triage report of current ABRT crash reports.
+# For each crash: shows component, version at crash time, current installed version,
+# whether the package was updated after the crash (likely fixed), and the command line.
+# Output is plain text — meant to be read by a human or fed to Claude for triage decisions.
+
+set -euo pipefail
+
+now=$(date '+%Y-%m-%d %H:%M:%S')
+echo "ABRT Triage Report — $now"
+echo "========================================"
+
+mapfile -t ids < <(abrt-cli list 2>/dev/null | awk '/^Id/{print $2}')
+
+if [[ ${#ids[@]} -eq 0 ]]; then
+    echo "No crash reports. Queue is clean."
+    exit 0
+fi
+
+echo "Found ${#ids[@]} crash report(s)."
+echo ""
+
+for id in "${ids[@]}"; do
+    info=$(abrt-cli info "$id" 2>/dev/null)
+
+    component=$(awk '/^Component/{print $2}' <<< "$info")
+    crash_time=$(awk '/^Time/{$1=""; print substr($0,2)}' <<< "$info")
+    count=$(awk '/^Count/{print $2}' <<< "$info")
+    cmdline=$(awk '/^Command line/{$1=$2=""; print substr($0,3)}' <<< "$info")
+    crash_pkg=$(awk '/^Package/{print $2}' <<< "$info")
+
+    # Current installed version (best-effort; may not match component name exactly)
+    current_pkg=$(rpm -q "$component" 2>/dev/null || rpm -q "${component}-core" 2>/dev/null || echo "not-found")
+
+    # Check if installed version is newer than crash version
+    if [[ "$current_pkg" == "not-found" || "$crash_pkg" == "" ]]; then
+        verdict="unknown (package not found via rpm)"
+    elif [[ "$current_pkg" == "$crash_pkg" ]]; then
+        verdict="SAME VERSION — crash may still be reproducible"
+    else
+        verdict="UPDATED since crash — likely fixed ($crash_pkg → $current_pkg)"
+    fi
+
+    echo "--- $id ---"
+    echo "  Component   : $component"
+    echo "  Crash time  : $crash_time (count: $count)"
+    echo "  Crash pkg   : ${crash_pkg:-unknown}"
+    echo "  Current pkg : $current_pkg"
+    echo "  Verdict     : $verdict"
+    echo "  Command     : ${cmdline:-unknown}"
+    echo ""
+done
+
+echo "========================================"
+echo "To remove a report:  yes | abrt-cli rm <id>"
+echo "To remove all same-version reports (manual review first):"
+echo "  abrt-cli list | awk '/^Id/{print \$2}' | xargs -I{} bash -c 'yes | abrt-cli rm {}'"

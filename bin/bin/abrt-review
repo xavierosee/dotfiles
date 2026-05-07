@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Interactive ABRT triage session. Runs abrt-triage, feeds output to Claude,
+# and lets you decide what to delete in a conversation.
+
+set -euo pipefail
+
+if ! command -v abrt-cli &>/dev/null; then
+    echo "abrt-cli not found" >&2
+    exit 1
+fi
+
+if ! command -v claude &>/dev/null; then
+    echo "claude CLI not found in PATH" >&2
+    exit 1
+fi
+
+report=$("$HOME/bin/abrt-triage" 2>&1)
+
+if grep -q "Queue is clean" <<< "$report"; then
+    echo "$report"
+    exit 0
+fi
+
+prompt="You are helping triage ABRT crash reports on a Fedora 43 machine (user: xavierosee).
+
+Here is the current triage report:
+
+$report
+
+For each crash report marked 'SAME VERSION — crash may still be reproducible':
+- Do a brief web search to check if the bug is known upstream or fixed in a newer release.
+
+Then produce a clear triage summary:
+1. SAFE TO DELETE — package was updated since crash, likely fixed
+2. NEEDS INVESTIGATION — same version still installed; include any upstream bug status you found
+3. UNKNOWN — package lookup failed
+
+After the summary, ask me which reports I want to delete. When I confirm, give me the exact commands to run (using 'yes | abrt-cli rm <id>' for each)."
+
+echo "Launching Claude for interactive ABRT triage..."
+echo ""
+exec claude --dangerously-skip-permissions -p "$prompt"
