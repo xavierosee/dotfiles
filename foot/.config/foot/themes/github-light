@@ -1,5 +1,5 @@
 # GitHub Light — ported from projekt0n/github-nvim-theme
-[colors]
+[colors-dark]
 background=d0d7de
 foreground=1f2328
 
