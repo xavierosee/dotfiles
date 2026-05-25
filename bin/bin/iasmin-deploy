@@ -15,7 +15,7 @@ rollback() {
 }
 trap 'rollback' ERR
 
-git fetch origin
+git fetch --no-write-fetch-head origin main
 git merge --ff-only origin/main
 
 if git diff --name-only "$PRE_DEPLOY_SHA" HEAD | grep -qE '^(requirements\.txt|setup\.py|pyproject\.toml)$'; then
