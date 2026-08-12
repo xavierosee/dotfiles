@@ -1,0 +1,8 @@
+[Unit]
+Description=Sync crush tensorix model list from api.tensorix.ai
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/bin/tensorix-sync-models

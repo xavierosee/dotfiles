@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""Sync crush's tensorix provider model list from the Tensorix API.
+
+Fetches /v1/models from api.tensorix.ai (key via `pass show api/tensorix`),
+filters out non-chat models, and rewrites providers.tensorix.models in
+~/.config/crush/crush.json in place, leaving the rest of the file untouched.
+The LiteLLM proxy routes by wildcard, so this file is the only thing that
+needs updating when Tensorix adds or renames models.
+
+Run by tensorix-models-sync.timer (daily) or manually.
+"""
+
+import json
+import re
+import subprocess
+import sys
+import urllib.request
+from pathlib import Path
+
+CRUSH_CONFIG = Path.home() / ".config/crush/crush.json"
+MODELS_URL = "https://api.tensorix.ai/v1/models"
+
+# Models that aren't chat-completion models (audio, embeddings, tts).
+NON_CHAT = re.compile(r"whisper|embedding|chatterbox|tts", re.IGNORECASE)
+
+# Upstream /v1/models carries no metadata, so context windows are kept here.
+# First matching prefix wins; anything unknown gets DEFAULTS.
+CONTEXT_WINDOWS = {
+    "moonshotai/kimi-k3": 262144,
+    "moonshotai/kimi-k2": 262144,
+    "deepseek/deepseek-v4-pro": 163840,
+    "deepseek/deepseek-v4-flash": 131072,
+    "deepseek/": 163840,
+    "z-ai/glm-5": 204800,
+    "qwen/": 131072,
+    "minimax/": 204800,
+}
+DEFAULTS = {"context_window": 131072, "default_max_tokens": 16384}
+
+# Fast/cheap variants don't emit reasoning; everything else on Tensorix does.
+NO_REASONING = re.compile(r"flash|turbo", re.IGNORECASE)
+
+
+def api_key() -> str:
+    return subprocess.run(
+        ["pass", "show", "api/tensorix"],
+        check=True, capture_output=True, text=True,
+    ).stdout.strip()
+
+
+def fetch_model_ids() -> list[str]:
+    req = urllib.request.Request(
+        MODELS_URL, headers={"Authorization": f"Bearer {api_key()}"}
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        data = json.load(resp)
+    return sorted(m["id"] for m in data["data"])
+
+
+def context_window(model_id: str) -> int:
+    for prefix, window in CONTEXT_WINDOWS.items():
+        if model_id.startswith(prefix):
+            return window
+    return DEFAULTS["context_window"]
+
+
+def to_entry(model_id: str) -> dict:
+    entry = {
+        "id": model_id,
+        "name": model_id,
+        "context_window": context_window(model_id),
+        "default_max_tokens": DEFAULTS["default_max_tokens"],
+    }
+    if not NO_REASONING.search(model_id):
+        entry["can_reason"] = True
+    return entry
+
+
+def main() -> int:
+    config = json.loads(CRUSH_CONFIG.read_text())
+    provider = config["providers"]["tensorix"]
+
+    chat_ids = [m for m in fetch_model_ids() if not NON_CHAT.search(m)]
+    if not chat_ids:
+        print("no chat models returned by upstream, refusing to update", file=sys.stderr)
+        return 1
+
+    old_ids = {m["id"] for m in provider["models"]}
+    provider["models"] = [to_entry(m) for m in chat_ids]
+    CRUSH_CONFIG.write_text(json.dumps(config, indent=2) + "\n")
+
+    added = sorted(set(chat_ids) - old_ids)
+    removed = sorted(old_ids - set(chat_ids))
+    print(f"{len(chat_ids)} models synced"
+          + (f", added: {', '.join(added)}" if added else "")
+          + (f", removed: {', '.join(removed)}" if removed else ""))
+
+    # Warn if the model crush currently has selected disappeared upstream.
+    state_file = Path.home() / ".local/share/crush/crush.json"
+    if state_file.exists():
+        state = json.loads(state_file.read_text())
+        for slot, sel in state.get("models", {}).items():
+            if sel.get("provider") == "tensorix" and sel.get("model") not in chat_ids:
+                print(f"warning: selected {slot} model {sel.get('model')!r} "
+                      "no longer exists upstream — pick a new one in crush",
+                      file=sys.stderr)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

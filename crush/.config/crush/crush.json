@@ -7,30 +7,127 @@
       "api_key": "sk-litellm",
       "models": [
         {
-          "id": "glm-5.1",
-          "name": "GLM-5.1 (default)",
-          "context_window": 200000,
-          "default_max_tokens": 16000,
+          "id": "deepseek/deepseek-r1-0528",
+          "name": "deepseek/deepseek-r1-0528",
+          "context_window": 163840,
+          "default_max_tokens": 16384,
           "can_reason": true
         },
         {
-          "id": "deepseek-v4-pro",
-          "name": "DeepSeek V4 Pro (reasoning)",
-          "context_window": 164000,
-          "default_max_tokens": 16000,
+          "id": "deepseek/deepseek-v3.2",
+          "name": "deepseek/deepseek-v3.2",
+          "context_window": 163840,
+          "default_max_tokens": 16384,
           "can_reason": true
         },
         {
-          "id": "deepseek-v4-flash",
-          "name": "DeepSeek V4 Flash (cheap/fast)",
-          "context_window": 128000,
-          "default_max_tokens": 8000
+          "id": "deepseek/deepseek-v4-flash-0731",
+          "name": "deepseek/deepseek-v4-flash-0731",
+          "context_window": 131072,
+          "default_max_tokens": 16384
         },
         {
-          "id": "kimi-k2.6",
-          "name": "Kimi K2.6 (long context)",
-          "context_window": 262000,
-          "default_max_tokens": 16000
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "deepseek/deepseek-v4-pro",
+          "context_window": 163840,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "minimax/minimax-m2.5",
+          "name": "minimax/minimax-m2.5",
+          "context_window": 204800,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "minimax/minimax-m3",
+          "name": "minimax/minimax-m3",
+          "context_window": 204800,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "moonshotai/kimi-k2.5",
+          "name": "moonshotai/kimi-k2.5",
+          "context_window": 262144,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "moonshotai/kimi-k2.6",
+          "name": "moonshotai/kimi-k2.6",
+          "context_window": 262144,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "moonshotai/kimi-k2.7-code",
+          "name": "moonshotai/kimi-k2.7-code",
+          "context_window": 262144,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "moonshotai/kimi-k3",
+          "name": "moonshotai/kimi-k3",
+          "context_window": 262144,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "qwen/qwen3-235b-a22b-2507",
+          "name": "qwen/qwen3-235b-a22b-2507",
+          "context_window": 131072,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "qwen/qwen3.5-122b-a10b",
+          "name": "qwen/qwen3.5-122b-a10b",
+          "context_window": 131072,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "qwen/qwen3.5-9b",
+          "name": "qwen/qwen3.5-9b",
+          "context_window": 131072,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "z-ai/glm-5",
+          "name": "z-ai/glm-5",
+          "context_window": 204800,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "z-ai/glm-5-turbo",
+          "name": "z-ai/glm-5-turbo",
+          "context_window": 204800,
+          "default_max_tokens": 16384
+        },
+        {
+          "id": "z-ai/glm-5.1",
+          "name": "z-ai/glm-5.1",
+          "context_window": 204800,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "z-ai/glm-5.2",
+          "name": "z-ai/glm-5.2",
+          "context_window": 204800,
+          "default_max_tokens": 16384,
+          "can_reason": true
+        },
+        {
+          "id": "z-ai/glm-5v-turbo",
+          "name": "z-ai/glm-5v-turbo",
+          "context_window": 204800,
+          "default_max_tokens": 16384
         }
       ]
     }
@@ -38,23 +135,43 @@
   "lsp": {
     "python": {
       "command": "pyright-langserver",
-      "args": ["--stdio"]
+      "args": [
+        "--stdio"
+      ]
     },
     "typescript": {
       "command": "npx",
-      "args": ["-y", "typescript-language-server", "--stdio"]
+      "args": [
+        "-y",
+        "typescript-language-server",
+        "--stdio"
+      ]
     },
     "bash": {
       "command": "bash-language-server",
-      "args": ["start"]
+      "args": [
+        "start"
+      ]
     },
     "yaml": {
       "command": "npx",
-      "args": ["-y", "yaml-language-server", "--stdio"]
+      "args": [
+        "-y",
+        "yaml-language-server",
+        "--stdio"
+      ]
     }
   },
   "permissions": {
-    "allowed_tools": ["ls", "rg", "git", "dbt", "pytest", "uv", "pip"]
+    "allowed_tools": [
+      "ls",
+      "rg",
+      "git",
+      "dbt",
+      "pytest",
+      "uv",
+      "pip"
+    ]
   },
   "options": {
     "disable_provider_auto_update": false,
