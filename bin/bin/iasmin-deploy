@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Deploy to the production tree (~/iasmin). Pulls main, reinstalls deps only if
+# requirements changed, restarts all running iasmin services.
+# Rolls back the merge if pip install fails so services never run new code with a stale venv.
+
+cd ~/iasmin
+
+PRE_DEPLOY_SHA=$(git rev-parse HEAD)
+
+rollback() {
+  echo "deploy failed, rolling back to $PRE_DEPLOY_SHA" >&2
+  git reset --hard "$PRE_DEPLOY_SHA"
+}
+trap 'rollback' ERR
+
+git fetch --no-write-fetch-head origin main
+git merge --ff-only origin/main
+
+if git diff --name-only "$PRE_DEPLOY_SHA" HEAD | grep -qE '^(requirements\.txt|setup\.py|pyproject\.toml)$'; then
+  ~/iasmin/.venv/bin/pip install -e ~/iasmin/ --quiet
+fi
+
+systemctl --user list-units 'iasmin-*' --state=running --no-legend | awk '{print $1}' \
+  | xargs -r systemctl --user restart
+
+trap - ERR
+echo "Deploy complete: $(git rev-parse --short HEAD)"
